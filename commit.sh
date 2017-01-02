@@ -27,8 +27,7 @@ fi
 message="$(./run.sh ${dir})"
 
 echo "${message}"
-exit
-rm ${dir}/*~
+rm -f ${dir}/*~
 
 for file in ${required_files}; do
     git add ${dir}/${file}
