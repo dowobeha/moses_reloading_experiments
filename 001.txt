@@ -1,0 +1,9 @@
+# Phrase tables
+Per-sentence on-demand positive PT
+Per-sentence on-demand negative PT
+Static PT
+Phrase dictionary group with default-average-others=true
+
+# Language models
+Static LM
+
