@@ -26,4 +26,4 @@ The scores within the dynamic PT could be changed on the fly by the client.py,
     and making undesired (negative) PT entries's scores become more negative
 
 # Result
-
+Success. By adding "topt":"true" to the XML-RPC request, translation options are returned.
