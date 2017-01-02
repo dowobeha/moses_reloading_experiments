@@ -1,7 +1,7 @@
 Defined parameters (per moses.ini or switch):
-	config: 001.ini 
+	config: moses.ini 
 	distortion-limit: 4 
-	feature: PhrasePenalty UnknownWordPenalty WordPenalty Distortion KENLM name=LM0 factor=0 path=001.lm PhraseDictionaryMemoryPerSentenceOnDemand name=TranslationModel0 num-features=4 tuneable=false input-factor=0 output-factor=0 table-limit=20 PhraseDictionaryMemoryPerSentenceOnDemand name=TranslationModel1 num-features=4 tuneable=false input-factor=0 output-factor=0 table-limit=20 PhraseDictionaryMemory name=TranslationModel2 num-features=4 tuneable=false input-factor=0 output-factor=0 path=001.pt table-limit=20 PhraseDictionaryGroup name=PhraseDictionaryGroup0 members=TranslationModel0,TranslationModel1,TranslationModel2 num-features=12 default-average-others=true 
+	feature: PhrasePenalty UnknownWordPenalty WordPenalty Distortion KENLM name=LM0 factor=0 path=static.lm PhraseDictionaryMemoryPerSentenceOnDemand name=TranslationModel0 num-features=4 tuneable=false input-factor=0 output-factor=0 table-limit=20 PhraseDictionaryMemoryPerSentenceOnDemand name=TranslationModel1 num-features=4 tuneable=false input-factor=0 output-factor=0 table-limit=20 PhraseDictionaryMemory name=TranslationModel2 num-features=4 tuneable=false input-factor=0 output-factor=0 path=static.pt table-limit=20 PhraseDictionaryGroup name=PhraseDictionaryGroup0 members=TranslationModel0,TranslationModel1,TranslationModel2 num-features=12 default-average-others=true 
 	input-factors: 0 
 	mapping: 0 T 3 
 	server: 
@@ -16,9 +16,9 @@ line=WordPenalty
 FeatureFunction: WordPenalty0 start: 2 end: 2
 line=Distortion
 FeatureFunction: Distortion0 start: 3 end: 3
-line=KENLM name=LM0 factor=0 path=001.lm
+line=KENLM name=LM0 factor=0 path=static.lm
 Loading the LM will be faster if you build a binary file.
-Reading 001.lm
+Reading static.lm
 ----5---10---15---20---25---30---35---40---45---50---55---60---65---70---75---80---85---90---95--100
 The ARPA file is missing <unk>.  Substituting log10 probability -100.000.
 ****************************************************************************************************
@@ -27,7 +27,7 @@ line=PhraseDictionaryMemoryPerSentenceOnDemand name=TranslationModel0 num-featur
 FeatureFunction: TranslationModel0 start: 5 end: 8
 line=PhraseDictionaryMemoryPerSentenceOnDemand name=TranslationModel1 num-features=4 tuneable=false input-factor=0 output-factor=0 table-limit=20
 FeatureFunction: TranslationModel1 start: 9 end: 12
-line=PhraseDictionaryMemory name=TranslationModel2 num-features=4 tuneable=false input-factor=0 output-factor=0 path=001.pt table-limit=20
+line=PhraseDictionaryMemory name=TranslationModel2 num-features=4 tuneable=false input-factor=0 output-factor=0 path=static.pt table-limit=20
 FeatureFunction: TranslationModel2 start: 13 end: 16
 line=PhraseDictionaryGroup name=PhraseDictionaryGroup0 members=TranslationModel0,TranslationModel1,TranslationModel2 num-features=12 default-average-others=true
 FeatureFunction: PhraseDictionaryGroup0 start: 17 end: 28
@@ -40,7 +40,7 @@ Loading TranslationModel0
 Loading TranslationModel1
 Loading TranslationModel2
 Start loading text phrase table. Moses format : [0.001] seconds
-Reading 001.pt
+Reading static.pt
 ----5---10---15---20---25---30---35---40---45---50---55---60---65---70---75---80---85---90---95--100
 ****************************************************************************************************
 Loading PhraseDictionaryGroup0

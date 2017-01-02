@@ -4,42 +4,42 @@
 
 if (( $# == 1 )); then
 
-    if [[ ${1} =~ .$ ]] ; then
-	prefix="${1%.}"
+    if [[ ${1} =~ /$ ]] ; then
+	dir="${1%/}"
 	2>&1 echo -e "Warning:\tAssuming you meant ${prefix} instead of ${1}"
     else
-	prefix=${1}
+	dir=${1}
     fi
 
-    for suffix in ini pt lm py txt; do
-	if [ ! -e ${prefix}.${suffix} ] ; then
-	    2>&1 echo -e "${prefix}.${suffix} is required, but was not found"
+    for file in moses.ini static.pt static.lm client.py summary.txt; do
+	if [ ! -e ${dir}/${file} ] ; then
+	    2>&1 echo -e "${dir}/${file} is required, but was not found"
 	    exit -1
 	fi
     done
 else
-    2>&1 echo -e "Usage: $0 file_prefix"
+    2>&1 echo -e "Usage: $0 dir"
     exit -1
 fi
 
 
-
+cd ${dir}
 clear
 
-2>&1 echo -e "Condition:\t${prefix}"
+2>&1 echo -e "Condition:\t${dir}"
 2>&1 echo
-2>&1 cat  ${prefix}.txt
+2>&1 cat  summary.txt
 2>&1 echo
 2>&1 echo
-2>&1 echo -e "Launching:\tmosesserver -v 1 -f ${prefix}.ini &> ${prefix}.log"
+2>&1 echo -e "Launching:\tmosesserver -v 1 -f ${dir}/moses.ini &> ${dir}/log"
 
-../bin/mosesserver -v 1 -f ${prefix}.ini --server-port 8090 &> ${prefix}.log &
+../../bin/mosesserver -v 1 -f moses.ini --server-port 8090 &> log &
 server_pid=${!}
 
 sleep 0.5
 
-2>&1 echo -e "Launching:\tmoses client ${prefix}.py"
+2>&1 echo -e "Launching:\tmoses client.py"
 2>&1 echo
-./${prefix}.py
+./client.py
 
 kill ${server_pid}
