@@ -1,0 +1,6 @@
+# Phrase tables
+Static PT
+
+# Language models
+Static LM
+
