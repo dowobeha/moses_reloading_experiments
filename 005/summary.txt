@@ -1,0 +1,18 @@
+# Phrase tables
+Static PT
+
+# Language models
+Static LM
+
+# Goal
+Building on 004, request (via XML-RPC) the breakdown of scores in the reported translation options.
+
+
+# Result
+Success. 
+
+If you request an nbest list from Moses via XML-RPC, 
+   the scores are reported (in order) in each of the nbest entries.
+
+This info can then be scraped (see client.py)
+

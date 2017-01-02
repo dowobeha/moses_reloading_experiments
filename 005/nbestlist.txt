@@ -1,0 +1,1 @@
+0 ||| cat  ||| Distortion0= 0 LM0= -4.60517 PhrasePenalty0= 1 WordPenalty0= -1 TranslationModel0= -3.69718 -4.53903 -1.60944 -2.451 ||| -12.5992
