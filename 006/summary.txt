@@ -1,0 +1,16 @@
+# Phrase tables
+Static PT
+
+# Language models
+Static LM
+
+# Goal
+Build on 004 and 005 to first gather all translation options, 
+      and then call a second instance of mosesserver using a Dynamic PT,
+      thus attempting to recreate (for later use in a dynamic PT) the result of the static PT
+
+# Status
+Success.
+
+Added new functionality to Moses (Moses commit 999d6b6371437862e9309c5bcfe5ccf78a9782ab)
+This new functionality exposes labelled translation option scores via XML-RPC.
