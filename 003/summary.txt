@@ -1,0 +1,16 @@
+# Phrase tables
+Per-sentence on-demand positive PT
+Per-sentence on-demand negative PT
+Static PT
+Phrase dictionary group with default-average-others=true
+
+# Language models
+Static LM
+
+# Goal
+Use positive PT to translate "chat" as "kitty" instead of "cat"
+Use negative PT to translate "un" as "an" instead of "a"
+Use XML-RPC weight update to accomplish these things
+
+# Result
+Did not succeed
