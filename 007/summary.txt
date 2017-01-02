@@ -1,0 +1,27 @@
+# Phrase tables
+Static PT
+
+# Language models
+Static LM
+
+# Goal
+Build on 004 and 005 to first gather all translation options, 
+      and then call a second instance of mosesserver using a Dynamic PT,
+      thus attempting to recreate (for later use in a dynamic PT) the result of the static PT
+
+# Status
+Success.
+
+Added new functionality to Moses (Moses commit 999d6b6371437862e9309c5bcfe5ccf78a9782ab)
+This new functionality exposes labelled translation option scores via XML-RPC.
+
+Added new functionality to Moses (Moses commit a18b6676b1aecd60973d1a4a81abc995ba1b9fe0)
+This new functionality enables the user to specify in the Moses config file
+     whether or not the values associated with phrase table entries in PhraseDictionaryMemoryPerSentenceOnDemand
+     are probability values.
+
+This turns out to be important. The code in PhraseDictionaryMemoryPerSentenceOnDemand was taking the log of incoming values.
+If this has already been done (in the client code) then you end up with NaN values some of the time, 
+   which in turn results in those on-demand phrase tables entries not being used.
+
+More importantly, some of the time we might want on-demand phrase table entries to have scores that are positive values, which we can't do if we take the log.
