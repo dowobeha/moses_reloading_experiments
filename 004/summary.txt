@@ -1,0 +1,29 @@
+# Phrase tables
+Static PT
+
+# Language models
+Static LM
+
+# Goal
+Use XML-RPC to get access to the original Moses translation options for a given sentence.
+
+
+# Rationale
+In the previous attempt (003), modifying the weights didn't seem to work.
+I don't know if this is because of averaging or because of something else.
+But modifying the pt values directly did work (002).
+
+So, if we can get the pt translation options, then the client.py can modify the accompanying scores directly.
+This would make modifying the weights unnecessary.
+
+If that works, then we could run two instances of moses server.
+The first instance would simply use a static PT and static LM.
+The second instance would not use a static PT,
+    but instead would simply use a single on-demand PT 
+    (and probably a single static LM, although in principle a dynamic LM could be used instead or as well)
+The scores within the dynamic PT could be changed on the fly by the client.py,
+    presumably making desired (positive) PT entries's scores become more positive
+    and making undesired (negative) PT entries's scores become more negative
+
+# Result
+
