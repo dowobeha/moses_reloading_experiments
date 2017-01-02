@@ -27,7 +27,7 @@ fi
 message="$(./run.sh ${dir})"
 
 echo "${message}"
-
+exit
 rm ${dir}/*~
 
 for file in ${required_files}; do

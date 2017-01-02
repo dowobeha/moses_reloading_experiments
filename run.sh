@@ -24,7 +24,6 @@ fi
 
 
 cd ${dir}
-clear
 
 2>&1 echo -e "Condition:\t${dir}"
 2>&1 echo
