@@ -1,0 +1,17 @@
+# Phrase tables
+Static PT
+Dynamic PT
+
+# Language models
+Static LM
+
+# Goal
+Build on the use of dynamic PT in 007:
+      In initializing the dynamic PT from the static PT,
+      the dynamic is edited to try to get moses to output
+      a different translation -- 
+      i.e. "chat" translated as "kitty" instead of "cat".
+
+# Status
+Success.
+
