@@ -1,0 +1,25 @@
+Defined parameters (per moses.ini or switch):
+	config: moses.ini 
+	distortion-limit: 4 
+	feature: PhrasePenalty UnknownWordPenalty WordPenalty Distortion PhraseDictionaryMemoryPerSentenceOnDemand name=TranslationModel0 num-features=4 tuneable=true input-factor=0 output-factor=0 table-limit=20 valuesAreProbabilities=false InMemoryPerSentenceOnDemandLM name=LM0 factor=0 
+	input-factors: 0 
+	mapping: 0 T 0 
+	server: 
+	server-port: 8091 
+	verbose: 3 
+	weight: PhrasePenalty0= 1 UnknownWordPenalty0= 1 WordPenalty0= -1 Distortion0= 0.2 LM0= 0.5 TranslationModel0= 1 1 1 1 
+line=PhrasePenalty
+FeatureFunction: PhrasePenalty0 start: 0 end: 0
+line=UnknownWordPenalty
+FeatureFunction: UnknownWordPenalty0 start: 1 end: 1
+line=WordPenalty
+FeatureFunction: WordPenalty0 start: 2 end: 2
+line=Distortion
+FeatureFunction: Distortion0 start: 3 end: 3
+line=PhraseDictionaryMemoryPerSentenceOnDemand name=TranslationModel0 num-features=4 tuneable=true input-factor=0 output-factor=0 table-limit=20 valuesAreProbabilities=false
+DecodeFeature:
+FeatureFunction: TranslationModel0 start: 4 end: 7
+line=InMemoryPerSentenceOnDemandLM name=LM0 factor=0
+Exception: moses/LM/InMemoryPerSentenceOnDemandLM.cpp:80 in Moses::LanguageModelKen<lm::ngram::ProbingModel>& Moses::InMemoryPerSentenceOnDemandLM::GetPerThreadLM() const threw util::Exception.
+Can't get a thread-specific LM because no temporary filename has been set for this thread
+

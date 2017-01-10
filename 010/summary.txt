@@ -1,0 +1,14 @@
+# Phrase tables
+Static PT
+Dynamic PT
+
+# Language models
+Static LM
+Dynamic LM
+
+# Goal
+Change dynamic LM to effect different translation.
+
+# Status
+Pending.
+
