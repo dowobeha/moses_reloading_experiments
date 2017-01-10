@@ -73,17 +73,17 @@ class LMdict:
                 return ""
             return str(value)
 
-        ret = "\\data\\\n"
+        ret = "\n\\data\\\n"
         for key in sorted(self.LM.keys()):
             ret+="ngram {}={}\n".format(key, len(self.LM[key]))
         for key in sorted(self.LM.keys()):
-            ret+="\n{}-grams:\n".format(key)
+            ret+="\n\\{}-grams:\n".format(key)
             for ngram in sorted(self.LM[key].keys()):
                 entry = self.LM[key][ngram]
                 left_coef = entry[0]
                 right_coef = entry[1]
                 ret+="{}\t{}\t{}".format(_xstr(left_coef), ngram, _xstr(right_coef)).strip()+"\n"
-            
+        ret+="\n\\end\\\n"
         return ret
          
 
@@ -123,6 +123,7 @@ for text in texts:
 #    print()
 
     contextScope = "TranslationModel0" + recordSeparator + dynamic_pt + groupSeparator + "LM0" + recordSeparator + dynamic_lm.toString()
+#    contextScope = "TranslationModel0" + recordSeparator + dynamic_pt + groupSeparator + "LM0" + recordSeparator + lm_string
     print("contextScope=\"{}\"".format(contextScope))
     print()
 
