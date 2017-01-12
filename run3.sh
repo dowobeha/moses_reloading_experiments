@@ -11,10 +11,10 @@ if (( $# == 1 )); then
 	workingDir=${1}
     fi
 
-    for file in moses.0.s.ini moses.1.s.ini \ 
+    for file in moses.0.s.ini moses.1.s.ini \
                 moses.0.d.ini moses.1.d.ini \
                 static.0.pt static.1.pt \
-                static.0.lm \
+                static.lm \
         ; do
         if [ ! -e ${workingDir}/${file} ] ; then
             2>&1 echo -e "${workingDir}/${file} is required, but was not found"
