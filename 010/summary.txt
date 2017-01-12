@@ -7,8 +7,17 @@ Static LM
 Dynamic LM
 
 # Goal
-Change dynamic LM to effect different translation.
+Change dynamic LM with translations from two source 
+languages to effect different translation.
 
 # Status
-Pending.
-
+Much implemented here, but no successful run.
+It was decided to create a new directory for 
+multiple static LMs and static PTs rather than 
+retroactively modify directories 006 and 010.  
+Directory 011 is built from 006 and 010 and it 
+is intended to be run with run3.sh, which expects 
+a single working dir with moses.ini files for 
+the static and dynamic moses servers of two
+source langs.  It also expects a static PT for 
+each source lang.

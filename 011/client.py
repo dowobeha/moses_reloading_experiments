@@ -10,17 +10,32 @@ from collections import defaultdict as dd
 # Globals
 
 groupSeparator="Moses::ContextScope::GroupSeparator"
+
 recordSeparator="Moses::ContextScope::RecordSeparator"
 
-languages=["fr","de"]
+languages=["de","fr"]
 
-sources = {'de':u"ich kaufe sie eine katze", 'fr':u"je vous achète un chat"}
+sources = {languages[0]:u"ich kaufe sie eine katze", 
+            languages[1]:u"je vous achète un chat",
+            }
 
-static_ports = {'de':8081, 'fr':8082}
-dynamic_ports = {'de':8083, 'fr':8084}
+staticPTstem = "StaticPT"
 
-dynamic_pts = {}
-dynamic_lm = None
+dynamicPTstem = "DynamicPT"
+
+static_ports = {languages[0]:8081, 
+                languages[1]:8082,
+                }
+
+dynamic_ports = {languages[0]:8083, 
+                    languages[1]:8084,
+                    }
+
+dynamic_PTs = {languages[0]:None,
+                languages[1]:None,
+                }
+
+dynamic_LM = None
 
 def defaultLambda():
     return -1
@@ -120,13 +135,13 @@ def get_updates(sources, ngram_order):
 
 #######################################################
 
-def writePT(src_lang, result):
+def writePT(src_lang, result, PTname):
     pt = topts(result["topt"], 
                 sources[src_lang].split(), 
-                "TranslationModel2",
+                PTname,
                 )
 
-    dynamic_pts[src_lang] = pt
+    dynamic_PTs[src_lang] = pt
 
     pt_filename = "{}.pt".format(src_lang)
     with open(pt_filename, 'w') as pt_file:
@@ -169,7 +184,7 @@ def writeLM(i, Lambdas, max_order):
     lm_file.write("\n\\end\\\n")
     lm_file.close()
     with open(lm_filename) as lm_file:
-        dynamic_lm = lm_file.read()
+        dynamic_LM = lm_file.read()
     print("{} written...".format(lm_filename))
 
 #######################################################i
@@ -177,7 +192,7 @@ def writeLM(i, Lambdas, max_order):
 def dualDecomposition(iters=10, eta=0.1, max_order=3):
 
     translations = []
-    for src_lang in languages:
+    for lang_index, src_lang in enumerate(languages):
 
         result = static_moses(static_ports[src_lang], 
                                 sources[src_lang],
@@ -187,8 +202,11 @@ def dualDecomposition(iters=10, eta=0.1, max_order=3):
         print(translation)
         translations.append(translation)
 
+        PTname = staticPTstem+str(lang_index)
+
         writePT(src_lang, 
                 result,
+                PTname,
                 )
 
     Lambdas = [dd(defaultLambda)] * len(translations)
@@ -204,11 +222,11 @@ def dualDecomposition(iters=10, eta=0.1, max_order=3):
                     )
 
         translations = []
-        for src_lang in languages:
+        for lang_index, src_lang in enumerate(languages):
 
-            contextScope = "TranslationModel" + recordSeparator + dynamic_pts[src_lang] \
+            contextScope = "TranslationModel" + recordSeparator + dynamic_PTs[src_lang] \
                             + groupSeparator \
-                            + "LM0" + recordSeparator + dynamic_lm
+                            + "LM0" + recordSeparator + dynamic_LM
 
             result = dynamic_moses(dynamic_ports[src_lang], 
                                     sources[src_lang], 
@@ -219,8 +237,11 @@ def dualDecomposition(iters=10, eta=0.1, max_order=3):
             print(translation)
             translations.append(translation)
 
+            PTname = dynamicPTstem+str(lang_index)
+
             writePT(src_lang, 
                     result,
+                    PTname
                     )
 
         if len(set(translations)) == 1:
