@@ -241,9 +241,12 @@ def dualDecomposition(iters=10, eta=0.1, max_order=3):
             print("dynamic_PTs[{}]=\n\"{}\"".format(src_lang, dynamic_PTs[src_lang]))
             print("dynamic_LM=\n\"{}\"".format(dynamic_LM))
 
-            contextScope = "TranslationModel" + recordSeparator + dynamic_PTs[src_lang] \
+            PTname = dynamicPTstem + str(lang_index)
+            LMname = dynamicLMstem + str(lang_index)
+
+            contextScope = PTname + recordSeparator + dynamic_PTs[src_lang] \
                             + groupSeparator \
-                            + "LM0" + recordSeparator + dynamic_LM
+                            + LMname + recordSeparator + dynamic_LM
 
             result = dynamic_moses(dynamic_ports[src_lang], 
                                     sources[src_lang], 
