@@ -1,0 +1,26 @@
+
+\data\
+ngram 1=6
+ngram 2=4
+ngram 3=3
+
+\1-grams:
+-5	<unk>
+-1.0	a	-99
+-1.0	buy	-99
+-1.0	cat	-99
+-1.0	i	-99
+-1.0	you	-99
+
+\2-grams:
+-1.0	a cat	-99
+-1.0	buy you	-99
+-1.0	i buy	-99
+-1.0	you a	-99
+
+\3-grams:
+-1.0	buy you a
+-1.0	i buy you
+-1.0	you a cat
+
+\end\

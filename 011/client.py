@@ -9,18 +9,35 @@ from collections import defaultdict as dd
 #######################################################
 # Globals
 
+languages=["de", "fr"]
+
+sources = {languages[0]:u"ich kaufe sie eine katze", 
+            languages[1]:u"je vous achète un chat",
+            }
+
+static_ports = {languages[0]:8081, 
+                languages[1]:8082,
+                }
+
+dynamic_ports = {languages[0]:8083, 
+                    languages[1]:8084,
+                    }
+
 groupSeparator="Moses::ContextScope::GroupSeparator"
+
 recordSeparator="Moses::ContextScope::RecordSeparator"
 
-languages=["fr","de"]
+staticPTstem = "StaticPT"
 
-sources = {'de':u"ich kaufe sie eine katze", 'fr':u"je vous achète un chat"}
+dynamicPTstem = "DynamicPT"
 
-static_ports = {'de':8081, 'fr':8082}
-dynamic_ports = {'de':8083, 'fr':8084}
+dynamicLMstem = "DynamicLM"
 
-dynamic_pts = {}
-dynamic_lm = None
+dynamic_PTs = {languages[0]:None,
+                languages[1]:None,
+                }
+
+dynamic_LM = None
 
 def defaultLambda():
     return -1
@@ -48,7 +65,7 @@ def static_moses(port, text):
     proxy = xmlrpc.client.ServerProxy(url)
     params = {
         "text":text,
-        "topt":"true"
+        "topt":"true",
     }
     return proxy.translate(params)
 
@@ -60,7 +77,7 @@ def dynamic_moses(port, text, contextScope):
     params = {
         "text":text,
         "topt":"true",
-        "contextScope":contextScope
+        "contextScope":contextScope,
     }
     return proxy.translate(params)
 
@@ -120,23 +137,28 @@ def get_updates(sources, ngram_order):
 
 #######################################################
 
-def writePT(src_lang, result):
+def writePT(src_lang, result, PTname):
     pt = topts(result["topt"], 
                 sources[src_lang].split(), 
-                "TranslationModel2",
+                PTname,
                 )
 
-    dynamic_pts[src_lang] = pt
+    global dynamic_PTs
+    dynamic_PTs[src_lang] = pt
 
-    pt_filename = "{}.pt".format(src_lang)
+    pt_filename = "_{}.pt".format(PTname)
     with open(pt_filename, 'w') as pt_file:
         pt_file.write(pt)
     print("{} written...".format(pt_filename))
 
 #######################################################
 
-def writeLM(i, Lambdas, max_order):
-    lm_filename = "{}.lm.arpa".format(languages[i])
+# TODO: Modify to write one string to file instead of line by line.
+#       Are there buffer concerns if modified in such a way? 
+# TODO: Eliminate need for lang_index parameter.
+
+def writeLM(i, Lambdas, max_order, LMname):
+    lm_filename = "_{}.lm".format(LMname)
     lm_file = open(lm_filename, 'w')
 
     lm_file.write("\n\\data\\\n")
@@ -168,8 +190,11 @@ def writeLM(i, Lambdas, max_order):
                     lm_file.write("{}\t{}\n".format("0", " ".join(ngram)))
     lm_file.write("\n\\end\\\n")
     lm_file.close()
+
     with open(lm_filename) as lm_file:
-        dynamic_lm = lm_file.read()
+        global dynamic_LM
+        dynamic_LM = lm_file.read()
+
     print("{} written...".format(lm_filename))
 
 #######################################################i
@@ -177,7 +202,7 @@ def writeLM(i, Lambdas, max_order):
 def dualDecomposition(iters=10, eta=0.1, max_order=3):
 
     translations = []
-    for src_lang in languages:
+    for lang_index, src_lang in enumerate(languages):
 
         result = static_moses(static_ports[src_lang], 
                                 sources[src_lang],
@@ -187,40 +212,56 @@ def dualDecomposition(iters=10, eta=0.1, max_order=3):
         print(translation)
         translations.append(translation)
 
+        PTname = staticPTstem + str(lang_index)
+
         writePT(src_lang, 
                 result,
+                PTname,
                 )
 
     Lambdas = [dd(defaultLambda)] * len(translations)
 
-    for i in range(iterations):
+    for i in range(iters):
         for lang_index, update in enumerate(get_updates(translations, max_order)):
             for ngram, value in update.items():
                 Lambdas[lang_index][ngram] += eta * value 
 
+            LMname = dynamicLMstem + str(lang_index)
+
+            # TODO: Remove lang_index parameter once method is modifed.
             writeLM(lang_index, 
                     Lambdas, 
                     max_order,
+                    LMname,
                     )
 
         translations = []
-        for src_lang in languages:
+        for lang_index, src_lang in enumerate(languages):
 
-            contextScope = "TranslationModel" + recordSeparator + dynamic_pts[src_lang] \
+            print("dynamic_PTs[{}]=\n\"{}\"".format(src_lang, dynamic_PTs[src_lang]))
+            print("dynamic_LM=\n\"{}\"".format(dynamic_LM))
+
+            PTname = dynamicPTstem + str(lang_index)
+            LMname = dynamicLMstem + str(lang_index)
+
+            contextScope = PTname + recordSeparator + dynamic_PTs[src_lang] \
                             + groupSeparator \
-                            + "LM0" + recordSeparator + dynamic_lm
+                            + LMname + recordSeparator + dynamic_LM
 
             result = dynamic_moses(dynamic_ports[src_lang], 
                                     sources[src_lang], 
-                                    contextScope
+                                    contextScope,
                                     )
 
             translation = re.sub(r"UNK\S+", "<unk>", result['text'])
             print(translation)
             translations.append(translation)
 
+            PTname = dynamicPTstem + str(lang_index)
+
             writePT(src_lang, 
                     result,
+                    PTname
                     )
 
         if len(set(translations)) == 1:
