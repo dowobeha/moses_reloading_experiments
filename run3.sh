@@ -32,7 +32,7 @@ cd ${workingDir}
 
 2>&1 echo -e "Condition:\t${workingDir}"
 2>&1 echo
-2>&1 cat  /summary.txt
+2>&1 cat  summary.txt
 2>&1 echo
 2>&1 echo
 2>&1 echo -e "Launching:\tmosesserver -v 1 -f moses.0.s.ini &> log.0.s"
