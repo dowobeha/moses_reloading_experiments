@@ -11,16 +11,16 @@ from collections import defaultdict as dd
 
 languages=["de", "fr"]
 
-sources = {languages[0]:u"ich kaufe sie eine katze", 
-            languages[1]:u"je vous achète un chat",
+sources = {languages[0]:u"<s> ich kaufe sie eine katze </s>", 
+            languages[1]:u"<s> je vous achète un chat </s>",
             }
 
-static_ports = {languages[0]:8081, 
-                languages[1]:8082,
+static_ports = {languages[0]:8080, 
+                languages[1]:8081,
                 }
 
-dynamic_ports = {languages[0]:8083, 
-                    languages[1]:8084,
+dynamic_ports = {languages[0]:8090, 
+                    languages[1]:8091,
                     }
 
 groupSeparator="Moses::ContextScope::GroupSeparator"
@@ -72,12 +72,18 @@ def static_moses(port, text):
 #######################################################
 
 def dynamic_moses(port, text, contextScope):
+
+#    print("contextScope=\n\"{}\"".format(contextScope))
+
     url = "http://localhost:{}/RPC2".format(port)
+
+#    print(url)
+
     proxy = xmlrpc.client.ServerProxy(url)
     params = {
         "text":text,
         "topt":"true",
-        "contextScope":contextScope,
+        "context-scope":contextScope,
     }
     return proxy.translate(params)
 
@@ -224,6 +230,7 @@ def dualDecomposition(iters=10, eta=0.1, max_order=3):
     for i in range(iters):
         for lang_index, update in enumerate(get_updates(translations, max_order)):
             for ngram, value in update.items():
+#                print("ngram={}\tvalue={}".format(ngram, value))
                 Lambdas[lang_index][ngram] += eta * value 
 
             LMname = dynamicLMstem + str(lang_index)
@@ -238,8 +245,8 @@ def dualDecomposition(iters=10, eta=0.1, max_order=3):
         translations = []
         for lang_index, src_lang in enumerate(languages):
 
-            print("dynamic_PTs[{}]=\n\"{}\"".format(src_lang, dynamic_PTs[src_lang]))
-            print("dynamic_LM=\n\"{}\"".format(dynamic_LM))
+#            print("dynamic_PTs[{}]=\n\"{}\"".format(src_lang, dynamic_PTs[src_lang]))
+#            print("dynamic_LM=\n\"{}\"".format(dynamic_LM))
 
             PTname = dynamicPTstem + str(lang_index)
             LMname = dynamicLMstem + str(lang_index)
