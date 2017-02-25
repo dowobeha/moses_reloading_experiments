@@ -1,0 +1,20 @@
+# Phrase tables
+static.0.pt
+static.1.pt
+reloading.0.pt
+reloading.1.pt
+
+# Language models
+static.lm
+reloading.0.lm
+reloading.1.lm
+
+# Other data
+src.alignment
+
+# Goal
+Use alignment of source languages to handle OOV items.
+
+# Status
+Pending.
+

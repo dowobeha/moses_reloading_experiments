@@ -11,8 +11,8 @@ from collections import defaultdict as dd
 
 languages=["de", "fr"]
 
-sources = {languages[0]:u"<s> ich kaufe sie eine katze </s>", 
-            languages[1]:u"<s> je vous achète un chat </s>",
+sources = {languages[0]:u"ich kaufe sie eine katze", 
+            languages[1]:u"je vous achète un chat",
             }
 
 static_ports = {languages[0]:8080, 
@@ -45,6 +45,9 @@ def defaultLambda():
 #######################################################
 
 def topts(topts, source, featureName):
+#def topts(topts, source, featureName, Lambdas):
+
+    print(topts)
 
     result=""
 
@@ -54,6 +57,7 @@ def topts(topts, source, featureName):
         source_phrase=" ".join(source[start:end])
         target_phrase=topt["phrase"]
         scores=topt["labelledScores"][featureName][0]
+#        scores = [score + Lambdas[target_phrase] for score in scores]
         result += "{} ||| {} ||| {}\n".format(source_phrase, target_phrase, " ".join([str(score) for score in scores]))
         
     return result
@@ -144,9 +148,11 @@ def get_updates(sources, ngram_order):
 #######################################################
 
 def writePT(src_lang, result, PTname):
+#def writePT(src_lang, Lambdas, result, PTname):
     pt = topts(result["topt"], 
                 sources[src_lang].split(), 
                 PTname,
+#                Lambdas,
                 )
 
     global dynamic_PTs
@@ -155,7 +161,7 @@ def writePT(src_lang, result, PTname):
     pt_filename = "_{}.pt".format(PTname)
     with open(pt_filename, 'w') as pt_file:
         pt_file.write(pt)
-    print("{} written...".format(pt_filename))
+    print("\t{} written...".format(pt_filename))
 
 #######################################################
 
@@ -163,33 +169,45 @@ def writePT(src_lang, result, PTname):
 #       Are there buffer concerns if modified in such a way? 
 # TODO: Eliminate need for lang_index parameter.
 
-def writeLM(i, Lambdas, max_order, LMname):
+def writeLM(Lambdas, max_order, LMname):
     lm_filename = "_{}.lm".format(LMname)
     lm_file = open(lm_filename, 'w')
 
     lm_file.write("\n\\data\\\n")
     for order in range(1, max_order+1):
-        count=len([(ngram,value) for ngram, value in Lambdas[i].items() if (len(ngram)==order)])
+#        count=len([(ngram,value) for ngram, value in Lambdas[i].items() if (len(ngram)==order)])
+        count=len([(ngram,value) for ngram, value in Lambdas.items() if (len(ngram)==order)])
         if order==1:
-            count += 1
+            count += 3
         lm_file.write("ngram {}={}\n".format(order, count))
     for order in range(1, max_order+1):
         lm_file.write("\n\\{}-grams:\n".format(order))
-        ngram_list = [(ngram, value) for ngram, value in Lambdas[i].items() if len(ngram)==order];
+#        ngram_list = [(ngram, value) for ngram, value in Lambdas[i].items() if len(ngram)==order];
+        ngram_list = [(ngram, value) for ngram, value in Lambdas.items() if len(ngram)==order];
         if order==1:
             unk=(('<unk>',), -5)
             ngram_list.append(unk)
+            starttag=(('<s>',), -99)
+            ngram_list.append(starttag)
+            endtag=(('</s>',),-0)
+            ngram_list.append(endtag)
         for ngram, value in sorted(ngram_list):
             if ngram==('<unk>',):
                 lm_file.write("{}\t{}\n".format(value, "<unk>"))
             elif ngram==('<s>',):
                 lm_file.write("{}\t{}\t{}\n".format("-99", "<s>", "-99"))
-            elif Lambdas[i][ngram] < 0:
+            elif ngram==('</s>',):
+                lm_file.write("{}\t{}\t{}\n".format("-0", "</s>", "-0"))
+#            elif Lambdas[i][ngram] < 0:
+            elif Lambdas[ngram] < 0:
                 if (order < max_order):
-                    lm_file.write("{}\t{}\t{}\n".format(Lambdas[i][ngram], " ".join(ngram), "-99"))
+#                    lm_file.write("{}\t{}\t{}\n".format(Lambdas[i][ngram], " ".join(ngram), "-99"))
+                    lm_file.write("{}\t{}\t{}\n".format(Lambdas[ngram], " ".join(ngram), "-99"))
                 else:
-                    lm_file.write("{}\t{}\n".format(Lambdas[i][ngram], " ".join(ngram)))
-            elif Lambdas[i][ngram] >= 0:
+#                    lm_file.write("{}\t{}\n".format(Lambdas[i][ngram], " ".join(ngram)))
+                    lm_file.write("{}\t{}\n".format(Lambdas[ngram], " ".join(ngram)))
+#            elif Lambdas[i][ngram] >= 0:
+            elif Lambdas[ngram] >= 0:
                 if (order < max_order):
                     lm_file.write("{}\t{}\t{}\n".format("0", " ".join(ngram), "-99"))
                 else:
@@ -201,7 +219,7 @@ def writeLM(i, Lambdas, max_order, LMname):
         global dynamic_LM
         dynamic_LM = lm_file.read()
 
-    print("{} written...".format(lm_filename))
+    print("\t{} written...".format(lm_filename))
 
 #######################################################i
 
@@ -225,22 +243,37 @@ def dualDecomposition(iters=10, eta=0.1, max_order=3):
                 PTname,
                 )
 
-    Lambdas = [dd(defaultLambda)] * len(translations)
+#    Lambdas = [dd(defaultLambda)] * len(translations)
+    Lambdas = dd(defaultLambda)
 
     for i in range(iters):
-        for lang_index, update in enumerate(get_updates(translations, max_order)):
+#        for lang_index, update in enumerate(get_updates(translations, max_order)):
+        print("translations={}".format(translations))
+        for update in get_updates(translations, max_order):
+            #TODO: Should update be enumerated, and the update for each language 
+            # is used to update the PT for the other language.  So, updates from the 
+            # translation from de source updates the fr PT and vice versa?
             for ngram, value in update.items():
 #                print("ngram={}\tvalue={}".format(ngram, value))
-                Lambdas[lang_index][ngram] += eta * value 
+#                Lambdas[lang_index][ngram] += eta * value 
+                Lambdas[ngram] += eta * value 
 
-            LMname = dynamicLMstem + str(lang_index)
+        PTname = staticPTstem + str(lang_index)
+
+        writePT(src_lang, 
+                result,
+                PTname,
+                )
+#            LMname = dynamicLMstem + str(lang_index)
 
             # TODO: Remove lang_index parameter once method is modifed.
-            writeLM(lang_index, 
-                    Lambdas, 
-                    max_order,
-                    LMname,
-                    )
+#            writeLM(lang_index, 
+#                    Lambdas, 
+        writeLM(Lambdas, 
+                max_order,
+#                    LMname,
+                dynamicLMstem,
+                )
 
         translations = []
         for lang_index, src_lang in enumerate(languages):
@@ -260,8 +293,8 @@ def dualDecomposition(iters=10, eta=0.1, max_order=3):
                                     contextScope,
                                     )
 
-            translation = re.sub(r"UNK\S+", "<unk>", result['text'])
-            print(translation)
+            translation = "<s> " + re.sub(r"UNK\S+", "<unk>", result['text']) + " </s>"
+            print("Language{} translation={}".format(lang_index, translation))
             translations.append(translation)
 
             PTname = dynamicPTstem + str(lang_index)
@@ -271,9 +304,14 @@ def dualDecomposition(iters=10, eta=0.1, max_order=3):
                     PTname
                     )
 
+            for lang in languages:
+                print("\n{} pt=\n{}\n".format(lang, dynamic_PTs[lang]))
+            print("\nlm=\n{}\n".format(dynamic_LM))
+
         if len(set(translations)) == 1:
             # CONVERGED
-            pass
+            print("Translations converged - exiting")
+            exit()
 
 
 

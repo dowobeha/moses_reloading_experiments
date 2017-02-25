@@ -1,0 +1,42 @@
+
+\data\
+ngram 1=12
+ngram 2=9
+ngram 3=8
+
+\1-grams:
+-0	</s>	-0
+-0	</s>	-0
+-99	<s>	-99
+-99	<s>	-99
+-5	<unk>
+-1.05	a	-99
+-0.95	an	-99
+-1.0	buy	-99
+-1.05	cat	-99
+-1.0	i	-99
+-0.95	kitty	-99
+-1.0	you	-99
+
+\2-grams:
+-1.0	<s> i	-99
+-1.05	a cat	-99
+-0.95	an kitty	-99
+-1.0	buy you	-99
+-1.05	cat </s>	-99
+-1.0	i buy	-99
+-0.95	kitty </s>	-99
+-1.05	you a	-99
+-0.95	you an	-99
+
+\3-grams:
+-1.0	<s> i buy
+-1.05	a cat </s>
+-0.95	an kitty </s>
+-1.05	buy you a
+-0.95	buy you an
+-1.0	i buy you
+-1.05	you a cat
+-0.95	you an kitty
+
+\end\

@@ -1,0 +1,17 @@
+# Phrase tables
+static.0.pt
+static.1.pt
+reloading.0.pt
+reloading.1.pt
+
+# Language models
+static.lm
+reloading.0.lm
+reloading.1.lm
+
+# Goal
+Use reloading LMs and PTs to get translations from two languages to converge.
+
+# Status
+Success.
+

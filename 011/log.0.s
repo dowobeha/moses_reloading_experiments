@@ -5,7 +5,7 @@ Defined parameters (per moses.ini or switch):
 	input-factors: 0 
 	mapping: 0 T 0 
 	server: 
-	server-port: 8081 
+	server-port: 8080 
 	verbose: 1 
 	weight: PhrasePenalty0= 1 UnknownWordPenalty0= 1 WordPenalty0= -1 Distortion0= 0.2 StaticLM0= 0.5 StaticPT0= 1 1 1 1 
 line=PhrasePenalty
@@ -36,10 +36,10 @@ Reading static.0.pt
 ----5---10---15---20---25---30---35---40---45---50---55---60---65---70---75---80---85---90---95--100
 ****************************************************************************************************
 RUN SERVER at pid 0
-[moses/server/Server.cpp:49] Listening on port 8081
+[moses/server/Server.cpp:49] Listening on port 8080
 [moses/server/TranslationRequest.cpp:291] Input: ich kaufe sie eine katze
 Translating: ich kaufe sie eine katze 
 Line 0: Collecting options took 0.000 seconds at moses/Manager.cpp Line 141
 Line 0: Search took 0.000 seconds
-[moses/server/TranslationRequest.cpp:465] BEST TRANSLATION: i buy you a cat [11111]  [total=-6.121] core=(2.000,0.000,-5.000,0.000,-4.605,1.843,-6.902,-0.223,-5.537)  
+[moses/server/TranslationRequest.cpp:465] BEST TRANSLATION: i buy you a cat [11111]  [total=-41.384] core=(4.000,0.000,-5.000,0.000,-4.605,-1.153,-21.674,-3.519,-21.736)  
 Signal of Class 15 received.  Exiting

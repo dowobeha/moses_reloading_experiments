@@ -37,28 +37,28 @@ cd ${workingDir}
 2>&1 echo
 2>&1 echo -e "Launching:\tmosesserver -v 1 -f moses.0.s.ini &> log.0.s"
 
-../../bin/mosesserver -v 1 -f moses.0.s.ini --server-port 8081 &> log.0.s &
+../../bin/mosesserver -v 1 -f moses.0.s.ini --server-port 8080 &> log.0.s &
 static_server_0_pid=${!}
 
 sleep 0.5
 
 2>&1 echo -e "Launching:\tmosesserver -v 1 -f moses.1.s.ini &> log.1.s"
 
-../../bin/mosesserver -v 1 -f moses.1.s.ini --server-port 8082 &> log.1.s &
+../../bin/mosesserver -v 1 -f moses.1.s.ini --server-port 8081 &> log.1.s &
 static_server_1_pid=${!}
 
 sleep 0.5
 
 2>&1 echo -e "Launching:\tmosesserver -v 1 -f moses.0.d.ini &> log.0.d"
 
-../../bin/mosesserver -v 1 -f moses.0.d.ini --server-port 8083 &> log.0.d &
+../../bin/mosesserver -v 1 -f moses.0.d.ini --server-port 8090 &> log.0.d &
 dynamic_server_0_pid=${!}
 
 sleep 0.5
 
 2>&1 echo -e "Launching:\tmosesserver -v 1 -f moses.1.s.ini &> log.1.d"
 
-../../bin/mosesserver -v 1 -f moses.1.d.ini --server-port 8084 &> log.1.d &
+../../bin/mosesserver -v 1 -f moses.1.d.ini --server-port 8091 &> log.1.d &
 dynamic_server_1_pid=${!}
 
 sleep 0.5
