@@ -9,7 +9,7 @@ from collections import defaultdict as dd
 #######################################################
 # Globals
 
-langs=["de", "fr"]
+langs=["de", "fr",]
 
 sources = [u"ich kaufe sie eine katze", u"je vous achète un chat",]
             
@@ -140,6 +140,24 @@ def get_updates(sources, ngram_order):
 
 #######################################################
 
+def handleOOV(oov, lang_index):
+    for i in range(len(langs)):
+        if i == lang_index:
+            continue
+        ltt_name = "static.{}.ltt".format(i)
+        with open(ltt_name) as ltt:
+            for line in ltt.read().split("\n"):
+                if len(line.split()) > 0 and oov == line.split()[1]:
+                    key = line.split()[0]
+                    for entry in reloading_PTs[i].split("\n"):
+                        entry = [s.strip() for s in entry.split("|||")]
+                        if entry[0] == key:
+                            # TODO: maybe new entry coeffs should be scaled by the prob in the ltt
+                            new_entry = "{} ||| {} ||| {}\n".format(oov, entry[1], entry[2])
+                            reloading_PTs[lang_index] += new_entry
+
+#######################################################
+
 def writePT(lang_index, result, prev_pt):
     pt_name = "reloading.{}.pt".format(lang_index)
     pt = topts(result["topt"], 
@@ -264,6 +282,10 @@ def dualDecomposition(iters=2000, eta=0.1, max_order=3):
                     result,
                     pt_name,
                     )
+
+            for word in sources[lang_index].split():
+                if word in translation.split():
+                    handleOOV(word, lang_index)
 
         if len(set(translations)) == 1: 
             trans_string = ""

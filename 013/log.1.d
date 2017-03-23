@@ -31,36 +31,41 @@ RUN SERVER at pid 0
 [moses/server/TranslationRequest.cpp:292] Input: je vous achète un chat
 Translating: je vous achète un chat 
 Loading the LM will be faster if you build a binary file.
-Reading /tmp/fileHp2AN0
+Reading /tmp/filecS6NVh
 ----5---10---15---20---25---30---35---40---45---50---55---60---65---70---75---80---85---90---95--100
 ****************************************************************************************************
-0x32e1aa0	LM initialized
+0x1f1baa0	LM initialized
 Line 0: Collecting options took 0.000 seconds at moses/Manager.cpp Line 141
 Line 0: Search took 0.000 seconds
 [moses/server/TranslationRequest.cpp:472] BEST TRANSLATION: i buy you an kitty [11111]  [total=-24.430] core=(-20.026,0.000,-5.000,0.000,6.802,-7.611,-1.099,-7.497,0.000)  
 [moses/server/TranslationRequest.cpp:292] Input: je vous achète un chat
 Translating: je vous achète un chat 
 Loading the LM will be faster if you build a binary file.
-Reading /tmp/filevWe2Dr
+Reading /tmp/filer7eajf
 ----5---10---15---20---25---30---35---40---45---50---55---60---65---70---75---80---85---90---95--100
 ****************************************************************************************************
-0x33640a0	LM initialized
+0x1f9e0a0	LM initialized
 Line 0: Collecting options took 0.000 seconds at moses/Manager.cpp Line 141
 Line 0: Search took 0.000 seconds
 [moses/server/TranslationRequest.cpp:472] BEST TRANSLATION: i buy you an kitty [11111]  [total=-35.943] core=(-31.539,0.000,-5.000,0.000,6.802,-7.611,-1.099,-7.497,0.000)  
 [moses/server/TranslationRequest.cpp:292] Input: je vous achète un chat
 Translating: je vous achète un chat 
 Loading the LM will be faster if you build a binary file.
-Reading /tmp/filefQVNxS
+Reading /tmp/filez46zJc
 ----5---10---15---20---25---30---35---40---45---50---55---60---65---70---75---80---85---90---95--100
 ****************************************************************************************************
-0x3367960	LM initialized
+0x1fa1960	LM initialized
 Line 0: Collecting options took 0.000 seconds at moses/Manager.cpp Line 141
 Line 0: Search took 0.000 seconds
 [moses/server/TranslationRequest.cpp:472] BEST TRANSLATION: i buy you an kitty [11111]  [total=-47.456] core=(-43.052,0.000,-5.000,0.000,6.802,-7.611,-1.099,-7.497,0.000)  
 [moses/server/TranslationRequest.cpp:292] Input: je vous achète un chat
 Translating: je vous achète un chat 
+Loading the LM will be faster if you build a binary file.
+Reading /tmp/filetaCoda
+----5---10---15---20---25---30---35---40---45---50---55---60---65---70---75---80---85---90---95--100
+****************************************************************************************************
+0x1f9e360	LM initialized
 Line 0: Collecting options took 0.000 seconds at moses/Manager.cpp Line 141
 Line 0: Search took 0.000 seconds
-[moses/server/TranslationRequest.cpp:472] BEST TRANSLATION: i buy you an kitty [11111]  [total=-52.758] core=(-48.354,0.000,-5.000,0.000,6.802,-7.611,-1.099,-7.497,0.000)  
+[moses/server/TranslationRequest.cpp:472] BEST TRANSLATION: i buy you an kitty [11111]  [total=-58.969] core=(-54.565,0.000,-5.000,0.000,6.802,-7.611,-1.099,-7.497,0.000)  
 Signal of Class 15 received.  Exiting

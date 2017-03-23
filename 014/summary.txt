@@ -9,12 +9,13 @@ static.lm
 reloading.0.lm
 reloading.1.lm
 
-# Other data
-src.alignment
+# Lexical translation tables
+static.0.ltt
+static.1.ltt
 
 # Goal
-Use alignment of source languages to handle OOV items.
+Use lexical translation tables of source languages to handle OOV items.
 
 # Status
-Pending.
+Success.
 
