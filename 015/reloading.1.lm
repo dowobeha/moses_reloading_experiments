@@ -1,8 +1,8 @@
 
 \data\
-ngram 1=11
-ngram 2=8
-ngram 3=7
+ngram 1=10
+ngram 2=7
+ngram 3=6
 
 \1-grams:
 -0	</s>	-0
@@ -13,27 +13,24 @@ ngram 3=7
 -1.0	an	-99
 -1.0	buy	-99
 -1.0	i	-99
--1.0	katze	-99
 -1.0	kitty	-99
 -1.0	you	-99
 
 \2-grams:
 -1.0	<s> i	-99
--1.0	an katze	-99
+-1.0	an </s>	-99
 -1.0	an kitty	-99
 -1.0	buy you	-99
 -1.0	i buy	-99
--1.0	katze </s>	-99
 -1.0	kitty </s>	-99
 -1.0	you an	-99
 
 \3-grams:
 -1.0	<s> i buy
--1.0	an katze </s>
 -1.0	an kitty </s>
 -1.0	buy you an
 -1.0	i buy you
--1.0	you an katze
+-1.0	you an </s>
 -1.0	you an kitty
 
 \end\

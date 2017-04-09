@@ -41,6 +41,7 @@ def clean_translation(trans):
 def topts(topts, source, featureName):
 
     result=""
+    unknowns=[]
 
     for topt in topts:
         start=topt["start"]
@@ -48,12 +49,16 @@ def topts(topts, source, featureName):
         source_phrase=" ".join(source[start:end])
         target_phrase=topt["phrase"]
         scores=topt["labelledScores"][featureName][0]
+        print("src: {}\t\ttgt: {}\t\t{}".format(source_phrase, target_phrase, scores))
+        if target_phrase == "":
+            unknowns.append(source_phrase)
+            continue
         result += "{} ||| {} ||| {}\n".format(source_phrase, 
                                             target_phrase, 
                                             " ".join([str(score) for score in scores]),
                                             )
        
-    return result
+    return result, unknowns
         
 #######################################################
 
@@ -154,20 +159,22 @@ def handleOOV(oov, lang_index):
                         entry = [s.strip() for s in entry.split("|||")]
                         if entry[0] == key:
                             # TODO: maybe new entry coeffs should be scaled by the prob in the ltt
-                            new_entry = "{} ||| {} ||| {}\n".format(oov, entry[1], entry[2])
+                            new_entry = "{} ||| {} ||| -90 -90 -90 -90\n".format(oov, entry[1])
                             reloading_PTs[lang_index] += new_entry
 
 #######################################################
 
 def writePT(lang_index, result, prev_pt):
     pt_name = "reloading.{}.pt".format(lang_index)
-    pt = topts(result["topt"], 
-                sources[lang_index].split(), 
-                prev_pt,
-                )
+    pt, unknowns = topts(result["topt"], 
+                   sources[lang_index].split(), 
+                   prev_pt,
+                   )
 
     global reloading_PTs
     reloading_PTs[lang_index] = pt
+    for unk in unknowns:
+        handleOOV(unk, lang_index)
 
     with open(pt_name, 'w') as pt_file:
         pt_file.write(pt)
@@ -226,6 +233,12 @@ def writeLM(lang_index, Lambdas, max_order):
 def dualDecomposition(iters=2000, eta=0.1, max_order=3):
 
     translations = []
+
+    for lang_index, src_lang in enumerate(langs):
+        pt_name = "static.{}.pt".format(lang_index)
+        with open(pt_name) as ptfile:
+            reloading_PTs[lang_index] = ptfile.read()
+
     for lang_index, src_lang in enumerate(langs):
 
         result = static_moses(static_ports[lang_index], 
@@ -284,9 +297,9 @@ def dualDecomposition(iters=2000, eta=0.1, max_order=3):
                     pt_name,
                     )
 
-            for word in sources[lang_index].split():
-                if word in translation.split():
-                    handleOOV(word, lang_index)
+#            for word in sources[lang_index].split():
+#                if word in translation.split():
+#                    handleOOV(word, lang_index)
 
         if len(set(translations)) == 1: 
             trans_string = ""

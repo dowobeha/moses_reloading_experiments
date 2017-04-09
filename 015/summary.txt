@@ -18,5 +18,12 @@ Use Moses flag to signal OOV item in translation and
 assign minimal prob mass (-90) to OOV when added to PT.
 
 # Status
-Pending.
+Success.
+Moses has been initialized in run3.sh with the -drop-unknown option, 
+such that in topts, the target-phrase != source-phrase; instead, 
+the target-phrase == "" for unknown words.  Therefore, when a 
+source-phrase is found whose target-phrase is the empty sting, 
+that source-phrase is added to a list of OOV.  That list is then 
+handled by the handleOOV method, which assigns scores of -90 to each 
+OOV of language A for which a translation is found in language B.
 
