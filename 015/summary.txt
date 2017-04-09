@@ -1,0 +1,22 @@
+# Phrase tables
+static.0.pt
+static.1.pt
+reloading.0.pt
+reloading.1.pt
+
+# Language models
+static.lm
+reloading.0.lm
+reloading.1.lm
+
+# Lexical translation tables
+static.0.ltt
+static.1.ltt
+
+# Goal
+Use Moses flag to signal OOV item in translation and 
+assign minimal prob mass (-90) to OOV when added to PT.
+
+# Status
+Pending.
+
