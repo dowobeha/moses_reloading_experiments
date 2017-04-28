@@ -1,0 +1,35 @@
+
+\data\
+ngram 1=14
+ngram 2=6
+ngram 3=2
+
+\1-grams:
+-1.0000	<s>	-0
+-1.0000	</s>	-0
+-1.0000	i	-0
+-1.0000	you	-0
+-1.0000	buy	-0
+-1.0000	buying	-0
+-1.0000	a	-0
+-1.0000	an	-0
+-1.0000	cat	-0
+-1.0000	the	-0
+-1.0000	dog	-0
+-1.0000	is	-0
+-1.0000	in	-0
+-1.0000	house	-0
+
+\2-grams:
+-0.0000	i buy	-0
+-0.0000	buy you	-0
+-0.0000	you a	-0
+-0.0000	a cat	-0
+-0.0000	the dog	-0
+-0.0000	the house	-0
+
+\3-grams:
+-0.0000	i buy you
+-0.0000	buy you a
+
+\end\

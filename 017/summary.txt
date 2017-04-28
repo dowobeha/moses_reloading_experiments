@@ -1,0 +1,21 @@
+# Phrase tables
+static.0.pt
+static.1.pt
+reloading.0.pt
+reloading.1.pt
+
+# Language models
+static.lm
+reloading.0.lm
+reloading.1.lm
+
+# Lexical translation tables
+static.0.ltt
+static.1.ltt
+
+# Goal
+Make input and output changes to better integrate with ducttape pipeline.
+Output one output file per source language.
+
+# Status
+Success.

@@ -1,0 +1,39 @@
+
+\data\
+ngram 1=10
+ngram 2=8
+ngram 3=8
+
+\1-grams:
+-0	</s>	-0
+-0	</s>	-0
+-99	<s>	-99
+-99	<s>	-99
+-5	<unk>
+-0.9999999999999999	dog	-99
+-1.0	house	-99
+-1.0	in	-99
+-1.0	is	-99
+-1.0	the	-99
+
+\2-grams:
+-1.0	<s> the	-99
+-0.9999999999999999	dog is	-99
+-1.0	house </s>	-99
+-1.0	in the	-99
+-1.0	is in	-99
+-0.9999999999999999	the dog	-99
+-1.0	the house	-99
+-1.0	the is	-99
+
+\3-grams:
+-0.9999999999999999	<s> the dog
+-1.0	<s> the is
+-0.9999999999999999	dog is in
+-1.0	in the house
+-1.0	is in the
+-0.9999999999999999	the dog is
+-1.0	the house </s>
+-1.0	the is in
+
+\end\
